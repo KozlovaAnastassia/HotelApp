@@ -81,11 +81,17 @@ final class ViewControllerAccept: UIViewController {
         view.backgroundColor = .white
         addSubViews()
         setConstraints()
+        addButtomForword()
         
-        let buttonBack = UIBarButtonItem(customView: buttomForword)
-        toolbarItems = [buttonBack]
+        labelDescription.textAlignment = .center
+    }
+    
+    func addButtomForword() {
+        let buttonForword = UIBarButtonItem(customView: buttomForword)
+        toolbarItems = [buttonForword]
         navigationController?.isToolbarHidden = false
     }
+    
     
     @objc func goForword() {
         navigationController?.popToRootViewController(animated: true)

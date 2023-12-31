@@ -39,6 +39,8 @@
 		5D84B68A2B43667B00239199 /* StarLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D84B6892B43667B00239199 /* StarLabel.swift */; };
 		5D84B68C2B4368BB00239199 /* PeculiaritiesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D84B68B2B4368BB00239199 /* PeculiaritiesCell.swift */; };
 		5D84B6922B438CF800239199 /* DynamicCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D84B6912B438CF800239199 /* DynamicCollectionView.swift */; };
+		5DA46D1E2B4E477700624EBD /* CustomActIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA46D1D2B4E477700624EBD /* CustomActIndicator.swift */; };
+		5DA46D202B4E4CAD00624EBD /* RoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA46D1F2B4E4CAD00624EBD /* RoomView.swift */; };
 		5DBEF4DE2B47821A007DDDC4 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBEF4DD2B47821A007DDDC4 /* Constants.swift */; };
 		5DE45CA52B474F5000FA4FBD /* HotelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE45CA42B474F5000FA4FBD /* HotelViewModel.swift */; };
 		5DE45CA72B47542B00FA4FBD /* RoomViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE45CA62B47542B00FA4FBD /* RoomViewModel.swift */; };
@@ -86,6 +88,8 @@
 		5D84B6892B43667B00239199 /* StarLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarLabel.swift; sourceTree = "<group>"; };
 		5D84B68B2B4368BB00239199 /* PeculiaritiesCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeculiaritiesCell.swift; sourceTree = "<group>"; };
 		5D84B6912B438CF800239199 /* DynamicCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicCollectionView.swift; sourceTree = "<group>"; };
+		5DA46D1D2B4E477700624EBD /* CustomActIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomActIndicator.swift; sourceTree = "<group>"; };
+		5DA46D1F2B4E4CAD00624EBD /* RoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomView.swift; sourceTree = "<group>"; };
 		5DBEF4DD2B47821A007DDDC4 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		5DE45CA42B474F5000FA4FBD /* HotelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotelViewModel.swift; sourceTree = "<group>"; };
 		5DE45CA62B47542B00FA4FBD /* RoomViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomViewModel.swift; sourceTree = "<group>"; };
@@ -212,6 +216,7 @@
 			children = (
 				5D84B66C2B41C6F200239199 /* ModelRoom.swift */,
 				5D84B66A2B41C57F00239199 /* ViewControllerRoom.swift */,
+				5DA46D1F2B4E4CAD00624EBD /* RoomView.swift */,
 				5DE45CA62B47542B00FA4FBD /* RoomViewModel.swift */,
 				5D84B66E2B41C9EE00239199 /* RoomCell.swift */,
 			);
@@ -233,8 +238,8 @@
 			children = (
 				5D84B6732B41D89A00239199 /* ViewControllerBooking.swift */,
 				5D47F9A62B471707005FB829 /* BookingModel.swift */,
-				5DE45CAA2B475C2B00FA4FBD /* BookingView.swift */,
 				5DE45CA82B475BE100FA4FBD /* BookingViewModel.swift */,
+				5DE45CAA2B475C2B00FA4FBD /* BookingView.swift */,
 				5D47F9B62B4730F3005FB829 /* View */,
 			);
 			path = BookingScreen;
@@ -255,6 +260,7 @@
 				5D47F9B92B473CC4005FB829 /* ImageModel.swift */,
 				5D84B6892B43667B00239199 /* StarLabel.swift */,
 				5D47F97B2B45CE09005FB829 /* CusButton.swift */,
+				5DA46D1D2B4E477700624EBD /* CustomActIndicator.swift */,
 				5D47F97D2B45CFC4005FB829 /* CustomTextField.swift */,
 				5D47F97F2B45D427005FB829 /* CustomLabel.swift */,
 				5D47F9812B45DF9D005FB829 /* CustomCollectionView.swift */,
@@ -413,12 +419,14 @@
 				5D47F9A32B4716F7005FB829 /* PassengerCell.swift in Sources */,
 				5D47F9862B45E414005FB829 /* CustomTableView.swift in Sources */,
 				5D47F98E2B461644005FB829 /* CustomScrollView.swift in Sources */,
+				5DA46D1E2B4E477700624EBD /* CustomActIndicator.swift in Sources */,
 				5D84B66B2B41C57F00239199 /* ViewControllerRoom.swift in Sources */,
 				5D84B6612B40A25900239199 /* Extension+UIImageView.swift in Sources */,
 				5DF8A4382B379EB700BFC9E9 /* SceneDelegate.swift in Sources */,
 				5D84B66F2B41C9EE00239199 /* RoomCell.swift in Sources */,
 				5D84B6742B41D89A00239199 /* ViewControllerBooking.swift in Sources */,
 				5D84B68C2B4368BB00239199 /* PeculiaritiesCell.swift in Sources */,
+				5DA46D202B4E4CAD00624EBD /* RoomView.swift in Sources */,
 				5D84B66D2B41C6F200239199 /* ModelRoom.swift in Sources */,
 				5D47F9842B45E3A8005FB829 /* DynamicHeightTableView.swift in Sources */,
 			);

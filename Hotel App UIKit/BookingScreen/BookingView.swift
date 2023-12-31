@@ -12,14 +12,22 @@ private extension String {
     static let userDataLabel = "Информация о покупателе"
     static let textFieldPhonePlaceHolder = "+7(___)-___-__-__"
     static let textFieldEmailPlaceholder = "email@gmail.com"
+    static let incorrectEmail = "Некоректный email"
+    static let ok = "OK"
+    static let error = "Ошибка"
 }
 
 private extension CGFloat {
     static let heightForRowAtDefault = 50.0
-    static let heightForRowAtExpanded = 450.0
+    static let heightForRowAtExpanded = 400.0
     
     static let headerHeightDefault = 40.0
     static let headerHeightMainData = 150.0
+}
+
+private extension Int {
+    static let phoneNumbersTotal = 18
+    static let one = 1
 }
 
 protocol IBookingView: AnyObject {
@@ -34,18 +42,21 @@ protocol IBookingView: AnyObject {
     func getMainData(indexPath: IndexPath) -> MainDataModel
     func pushToAnotherController()
     func buttonTapped(sender: UIButton)
+    func presentAlert(alert: UIAlertController)
 }
 
 final class BookingView: UIView {
     
+    var isDataCorrect: Bool?
+    
     weak var delegate: IBookingView?
     
-    lazy var userDataLabel = UILabel.labelHead(title: String.userDataLabel)
-    lazy var userDataAttension = UILabel.labelDescriptionGray(title: String.labelDescription)
-    lazy var departureLabel = UILabel.labelDescriptionGray(title: nil)
+    private var userDataLabel = UILabel.labelHead(title: String.userDataLabel)
+    private var userDataAttension = UILabel.labelDescriptionGray(title: String.labelDescription)
+    private var departureLabel = UILabel.labelDescriptionGray(title: nil)
 
-    lazy var textFieldPhone = UITextField.textFieldInfo(placeholder: String.textFieldPhonePlaceHolder, numberPad: true)
-    lazy var textFieldEmail = UITextField.textFieldInfo(placeholder: String.textFieldEmailPlaceholder, numberPad: false)
+    private var textFieldPhone = UITextField.textFieldInfo(placeholder: String.textFieldPhonePlaceHolder, numberPad: true)
+    private var textFieldEmail = UITextField.textFieldInfo(placeholder: String.textFieldEmailPlaceholder, numberPad: false)
    
     lazy var buttomForword = UIButton.forwordButton(title: Constants.ButtonForwardTitle.bookingScreen, target: self,  action: #selector(goForword))
     
@@ -53,7 +64,10 @@ final class BookingView: UIView {
     lazy var  tableViewPassengers = UITableView.customTableView(cellClass: PassengerCell.self, reuseIdentifier: PassengerCell.identifier)
     lazy var  tableViewPrice = UITableView.customTableView(cellClass: MainDataCell.self, reuseIdentifier: MainDataCell.identifier)
     
-    lazy var stackViewMain: UIStackView = {
+    private lazy var labelError = UILabel.labelError()
+    private lazy var activityIndicator = UIActivityIndicatorView.activityIndicator()
+    
+    private lazy var stackViewMain: UIStackView = {
         let stack =  UIStackView()
         stack.axis = .vertical
         stack.alignment = .leading
@@ -81,8 +95,38 @@ final class BookingView: UIView {
         fatalError(Constants.Errors.initError)
     }
     
+    @objc func goForword() {
+        let textPhone = textFieldPhone.text ?? String()
+        let textEmail = textFieldEmail.text ?? String()
+        
+        if textPhone.isEmpty {
+            textFieldPhone.backgroundColor = Constants.Colors.errorColor
+        }
+        if textEmail.isEmpty {
+            textFieldEmail.backgroundColor = Constants.Colors.errorColor
+        }
+        if isDataCorrect == nil {
+            isDataCorrect = false
+        }
+        if isDataCorrect == false {
+            tableViewPassengers.reloadData()
+            return
+        }
+        
+        if textPhone.isEmpty || textEmail.isEmpty {
+            return
+        }
+        
+        isDataCorrect = false
+        textFieldPhone.backgroundColor = Constants.Colors.grayTextField
+        textFieldEmail.backgroundColor = Constants.Colors.grayTextField
+        delegate?.pushToAnotherController()
+    }
+    
     private func addSubViews() {
         addSubview(stackViewMain)
+        addSubview(labelError)
+        addSubview(activityIndicator)
     }
     
     private func setConstraints() {
@@ -91,6 +135,15 @@ final class BookingView: UIView {
             stackViewMain.trailingAnchor.constraint(equalTo: trailingAnchor),
             stackViewMain.topAnchor.constraint(equalTo: topAnchor),
             stackViewMain.bottomAnchor.constraint(equalTo: bottomAnchor),
+            
+            textFieldPhone.widthAnchor.constraint(equalTo: stackViewMain.widthAnchor),
+            textFieldEmail.widthAnchor.constraint(equalTo: stackViewMain.widthAnchor),
+            
+            labelError.centerXAnchor.constraint(equalTo: centerXAnchor),
+            labelError.centerYAnchor.constraint(equalTo: centerYAnchor),
+            
+            activityIndicator.centerXAnchor.constraint(equalTo: centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: centerYAnchor),
         ])
     }
     
@@ -108,8 +161,11 @@ final class BookingView: UIView {
         tableViewPrice.delegate = self
     }
     
-    @objc func goForword() {
-        delegate?.pushToAnotherController()
+    private func setErrorAlert(message: String) {
+        let alert = UIAlertController(title: String.error, message: message, preferredStyle: .alert)
+        let action = UIAlertAction(title: String.ok, style: .default)
+        alert.addAction(action)
+        delegate?.presentAlert(alert: alert)
     }
     
     func getHeaderData(response: BookingModel) {
@@ -120,6 +176,27 @@ final class BookingView: UIView {
                                                            horating: response.horating,
                                                            rating_name: response.rating_name))
     }
+    
+    func failureScreeen() {
+        stackViewMain.isHidden = true
+        labelError.isHidden = false
+        activityIndicator.isHidden = true
+        activityIndicator.stopAnimating()
+    }
+    
+    func loadingScreeen() {
+        stackViewMain.isHidden = true
+        activityIndicator.isHidden = false
+        activityIndicator.startAnimating()
+        labelError.isHidden = true
+    }
+    
+    func loadedScreeen() {
+        stackViewMain.isHidden = false
+        activityIndicator.isHidden = true
+        activityIndicator.stopAnimating()
+        labelError.isHidden = true
+    }
 }
 
 extension BookingView: UITableViewDelegate, UITableViewDataSource {
@@ -128,7 +205,7 @@ extension BookingView: UITableViewDelegate, UITableViewDataSource {
         
         switch tableView {
         case tableViewPassengers:
-            if isExpanded {return 1}
+            if isExpanded {return Int.one}
             return .zero
         case tableViewPrice:
             return delegate?.getPriceDataCount() ?? Int()
@@ -141,7 +218,7 @@ extension BookingView: UITableViewDelegate, UITableViewDataSource {
         if tableView == tableViewPassengers{
             return delegate?.getPassengersCount() ?? Int()
         }
-        return 1
+        return Int.one
     }
     
     
@@ -157,6 +234,16 @@ extension BookingView: UITableViewDelegate, UITableViewDataSource {
         switch tableView {
         case tableViewPassengers:
             let cell = tableView.dequeueReusableCell(withIdentifier: PassengerCell.identifier, for: indexPath) as? PassengerCell
+            
+            if let indexPath = tableView.indexPath(for: cell ?? UITableViewCell()) {
+                if  indexPath.section == .zero {
+                    if let bool = cell?.checkEmptyTextField(cellIndex: .zero, isDataCorrect: self.isDataCorrect){
+                        if bool {
+                            isDataCorrect = true
+                        }
+                    }
+                }
+            }
             return cell ?? UITableViewCell()
             
         case tableViewPrice:
@@ -168,6 +255,7 @@ extension BookingView: UITableViewDelegate, UITableViewDataSource {
         default:
             let cell = tableView.dequeueReusableCell(withIdentifier: MainDataCell.identifier, for: indexPath) as? MainDataCell
             guard let model = delegate?.getMainData(indexPath: indexPath) else {return cell ?? MainDataCell()}
+            cell?.labelData.textAlignment = .left
             cell?.configure(model)
             return cell ?? UITableViewCell()
         }
@@ -201,11 +289,30 @@ extension BookingView: UITableViewDelegate, UITableViewDataSource {
 extension BookingView: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if textField == textFieldPhone {
-            let fullString = (textField.text ?? "") + string
-            textField.text = Formuls.shared.format(phoneNumber: fullString, shouldRemoveLastDigit: range.length == 1)
+            let fullString = (textField.text ?? String()) + string
+            textField.text = Formuls.shared.phoneFormat(phoneNumber: fullString)
             return false
         } else {
-            return false
+            return true
+        }
+    }
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if textField == textFieldEmail {
+            if let text = textField.text {
+                if !Formuls.shared.isValidEmail(email: text) {
+                    setErrorAlert(message: String.incorrectEmail)
+                    textFieldEmail.backgroundColor = Constants.Colors.errorColor
+                } else {
+                    textFieldEmail.backgroundColor = Constants.Colors.grayTextField
+                }
+            }
+        }
+        if textField == textFieldPhone {
+            if textField.text?.count == Int.phoneNumbersTotal {
+                textFieldPhone.backgroundColor = Constants.Colors.grayTextField
+            } else {
+                textFieldPhone.backgroundColor = Constants.Colors.errorColor
+            }
         }
     }
 }

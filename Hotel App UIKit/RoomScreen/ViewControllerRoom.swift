@@ -7,14 +7,24 @@
 
 import UIKit
 
-private extension CGFloat {
-    static let tableViewHeghtRow = 550.0
-}
+final class ViewControllerRoom: UIViewController, IRoomView {
 
-final class ViewControllerRoom: UITableViewController {
-    
     private var viewModel: IRoomViewModel
-    let titleHotel: String
+    private let titleHotel: String
+    private let roomView = RoomView()
+    
+    private lazy var scrollView = UIScrollView.customScroll(viewMain: self.view, viewContent: roomView)
+    
+    private var state: State = .plain {
+        didSet {
+            switch state  {
+            case .failure: roomView.failureScreeen()
+            case .loading: roomView.loadingScreeen()
+            case .loaded:  roomView.loadedScreeen()
+            default:  roomView.loadingScreeen()
+            }
+        }
+    }
     
     init(titleHotel: String, viewModel: IRoomViewModel) {
         self.titleHotel = titleHotel
@@ -28,49 +38,43 @@ final class ViewControllerRoom: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
         title = titleHotel
+        view.backgroundColor = .white
+        view.addSubview(scrollView)
+        
+        state = .loading
+        roomView.delegate = self
         
         viewModel.requestt(urlString: Constants.Url.roomURL)
         
         viewModel.result = {  [weak self]  in
+            self?.state = .loaded
             DispatchQueue.main.async {
-                self?.tableView.reloadData()
+                self?.roomView.tableViewRoom.reloadData()
             }
         }
-        
-        tableView.register(RoomCell.self, forCellReuseIdentifier: RoomCell.identifier)
+        viewModel.error = {
+            self.state = .failure
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
         navigationController?.isToolbarHidden = true
     }
-}
-
-extension ViewControllerRoom {
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func getRoomsCount() -> Int {
         viewModel.getRoomsCount
     }
-
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return  CGFloat.tableViewHeghtRow
+    
+    func getRoomData(indexPath: IndexPath) -> Room {
+        viewModel.getRoomData(indexPath: indexPath)
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: RoomCell.identifier, for: indexPath) as? RoomCell
-
-        let model = viewModel.getRoomData(indexPath: indexPath)
-        cell?.configure(model)
-        
-        cell?.buttonAction = {
-            let vc = ViewControllerBooking(viewModel: BookingViewModel(networkService: NetworkService()))
-                self.navigationController?.pushViewController(vc, animated: true)
-            }
-        return cell ?? UITableViewCell()
+    func goForward(vc: UIViewController) {
+        navigationController?.pushViewController(vc, animated: true)
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-    }
 }
+
 
 

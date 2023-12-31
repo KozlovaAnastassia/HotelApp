@@ -7,13 +7,10 @@
 //
 import UIKit
 
-private extension String {
-    static let buttomDownImage = "arrow.down.square"
-}
-
 private extension CGFloat {
     static let stackViewSpacing = 150.0
     static let stackViewTop = 10.0
+    static let buttonSize = 30.0
 }
 
 final class PassengerHeader: UIView {
@@ -22,8 +19,10 @@ final class PassengerHeader: UIView {
 
     lazy var buttomDown: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: String.buttomDownImage), for: .normal)
+        button.setImage(UIImage(systemName: Constants.ImageSystemName.arrowDown), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.widthAnchor.constraint(equalToConstant: CGFloat.buttonSize).isActive = true
+        button.heightAnchor.constraint(equalToConstant: CGFloat.buttonSize).isActive = true
         button.sizeToFit()
         return button
     }()

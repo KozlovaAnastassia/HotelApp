@@ -11,10 +11,6 @@ private extension String {
     static let buttonDetailsTitle = "Подробнее о номере"
 }
 
-private extension CGFloat {
-    static let stackViewLeading = 16.0
-}
-
 final class RoomCell: UITableViewCell {
     
     static var identifier: String {"\(Self.self)"}
@@ -23,7 +19,7 @@ final class RoomCell: UITableViewCell {
     var peculiarities = [String]()
     var buttonAction: (() -> Void)?
     
-    lazy var collectionView = UICollectionView.imageCollectionView()
+    lazy var collectionViewImage = UICollectionView.imageCollectionView()
     lazy var collectionViewPeculiarities = UICollectionView.customCollectionView(cellClass: PeculiaritiesCell.self, reuseIdentifier: PeculiaritiesCell.identifier)
     
     lazy var buttonDetails = UIButton.buttonDetails(title: String.buttonDetailsTitle)
@@ -45,13 +41,13 @@ final class RoomCell: UITableViewCell {
         return stack
     }()
     
-    private lazy var stackView: UIStackView = {
+    private lazy var stackViewMain: UIStackView = {
         let stack = UIStackView()
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.alignment = .leading
         stack.axis = .vertical
         stack.spacing = Constants.Spacing.stackViewSpacingVer
-        stack.addArrangedSubview(collectionView)
+        stack.addArrangedSubview(collectionViewImage)
         stack.addArrangedSubview(nameLabel)
         stack.addArrangedSubview(collectionViewPeculiarities)
         stack.addArrangedSubview(buttonDetails)
@@ -78,8 +74,8 @@ final class RoomCell: UITableViewCell {
     }
     
     private func setDelegates() {
-        collectionView.dataSource = self
-        collectionView.delegate = self
+        collectionViewImage.dataSource = self
+        collectionViewImage.delegate = self
         
         collectionViewPeculiarities.dataSource = self
         collectionViewPeculiarities.delegate = self
@@ -92,14 +88,18 @@ final class RoomCell: UITableViewCell {
     }
     
     private func addViews() {
-        contentView.addSubview(stackView)
+        contentView.addSubview(stackViewMain)
     }
      
      private func setConstraints() {
          NSLayoutConstraint.activate([
-            stackView.leadingAnchor.constraint(equalTo: leadingAnchor,constant: CGFloat.stackViewLeading),
-            stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            stackView.topAnchor.constraint(equalTo: topAnchor),
+            collectionViewPeculiarities.widthAnchor.constraint(equalTo: stackViewMain.widthAnchor),
+            collectionViewImage.widthAnchor.constraint(equalTo: stackViewMain.widthAnchor),
+            buttomForword.widthAnchor.constraint(equalTo: stackViewMain.widthAnchor),
+            
+            stackViewMain.leadingAnchor.constraint(equalTo: leadingAnchor),
+            stackViewMain.trailingAnchor.constraint(equalTo: trailingAnchor),
+            stackViewMain.topAnchor.constraint(equalTo: topAnchor),
          ])
      }
     
@@ -109,7 +109,7 @@ final class RoomCell: UITableViewCell {
         labelForPrice.text = model.price_per
         images += model.image_urls
         peculiarities += model.peculiarities
-        collectionView.reloadData()
+        collectionViewImage.reloadData()
         collectionViewPeculiarities.reloadData()
    }
 }

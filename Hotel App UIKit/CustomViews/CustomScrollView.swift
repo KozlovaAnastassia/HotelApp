@@ -9,32 +9,30 @@ import UIKit
 
 private extension CGFloat {
     static let contSizeHeight = 600.0
-    static let stackOffset = 16.0
-    static let stackInset = -16.0
 }
 
 extension UIScrollView {
-    static func customScroll(view: UIView, stack: UIStackView) -> UIScrollView {
+    static func customScroll(viewMain: UIView, viewContent: UIView) -> UIScrollView {
         
-        let contSize =  CGSize(width: view.frame.width, height: view.frame.height + CGFloat.contSizeHeight)
-        
-        let contentView = UIView()
-         contentView.backgroundColor = .white
-         contentView.frame.size = contSize
-        
-        let scroll =  UIScrollView()
-        scroll.contentSize = contentView.bounds.size
-        scroll.frame = view.bounds
-        
-        contentView.addSubview(stack)
-        scroll.addSubview(contentView)
-        
-        NSLayoutConstraint.activate([
-            stack.topAnchor.constraint(equalTo: contentView.topAnchor),
-            stack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: CGFloat.stackOffset),
-            stack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: CGFloat.stackInset),
-        ])
-        return scroll
+        viewContent.translatesAutoresizingMaskIntoConstraints = false
+        let scrollView = UIScrollView()
+            scrollView.translatesAutoresizingMaskIntoConstraints = false
+
+            scrollView.addSubview(viewContent)
+            viewMain.addSubview(scrollView)
+
+            NSLayoutConstraint.activate([
+                scrollView.leadingAnchor.constraint(equalTo: viewMain.leadingAnchor),
+                scrollView.trailingAnchor.constraint(equalTo: viewMain.trailingAnchor),
+                scrollView.topAnchor.constraint(equalTo: viewMain.topAnchor),
+                scrollView.bottomAnchor.constraint(equalTo: viewMain.bottomAnchor),
+                
+                viewContent.leadingAnchor.constraint(equalTo: viewMain.leadingAnchor, constant: Constants.Constraints.offset16),
+                viewContent.trailingAnchor.constraint(equalTo: viewMain.trailingAnchor, constant: Constants.Constraints.inset16),
+                viewContent.topAnchor.constraint(equalTo: scrollView.topAnchor),
+                viewContent.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            ])
+       return scrollView
     }
 
 }

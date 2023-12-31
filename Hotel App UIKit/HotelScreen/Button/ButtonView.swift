@@ -7,13 +7,10 @@
 
 import UIKit
 
-private extension String {
-    static let imageViewNextImage = "arrow.forward"
-}
 
 private extension CGFloat {
-    static let imageViewNextSize = 25.0
-    static let imageViewSize = 50.0
+    static let imageViewNextSize = 20.0
+    static let imageViewSize = 30.0
     
     static let stackViewHorSpacing = 20.0
     static let stackViewVerSpacing = 4.0
@@ -44,7 +41,7 @@ final class CustomButtonView: UIView {
     
     private lazy var imageViewNext: UIImageView = {
         let image = UIImageView()
-        image.image = UIImage(systemName: String.imageViewNextImage)
+        image.image = UIImage(systemName: Constants.ImageSystemName.arrowForward)
         image.contentMode = .scaleAspectFit
         image.tintColor = UIColor.black
         image.translatesAutoresizingMaskIntoConstraints = false
@@ -90,8 +87,8 @@ final class CustomButtonView: UIView {
     private func setupConstraints() {
         stackViewHorizontal.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            stackViewHorizontal.leadingAnchor.constraint(equalTo: leadingAnchor),
-            stackViewHorizontal.trailingAnchor.constraint(equalTo: trailingAnchor),
+            stackViewHorizontal.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.Constraints.offset16),
+            stackViewHorizontal.trailingAnchor.constraint(equalTo: trailingAnchor, constant: Constants.Constraints.inset16),
             stackViewHorizontal.topAnchor.constraint(equalTo: topAnchor),
             stackViewHorizontal.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])

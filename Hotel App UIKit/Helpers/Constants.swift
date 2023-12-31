@@ -7,6 +7,13 @@
 
 import UIKit
 
+enum State {
+    case plain
+    case failure
+    case loaded
+    case loading
+}
+
 enum Constants {
     enum ButtonForwardTitle {
         static let hotelScreen: String = "К выбору номера"
@@ -27,11 +34,12 @@ enum Constants {
     
     enum Colors {
         static let graybg: UIColor = UIColor(hexString: "#FBFBFC")
+        static let grayTextField: UIColor = UIColor(hexString: "#F6F6F9")
         static let fontGray: UIColor = UIColor(hexString: "#828796")
         static let yellowFont: UIColor = UIColor(hexString: "#FFA800")
         static let yellowBg: UIColor = UIColor(hexString: "#FFC700").withAlphaComponent(CGFloat(0.2))
         static let blueFont: UIColor = UIColor(hexString: "#0D72FF")
-        
+        static let errorColor: UIColor = UIColor(hexString: "#EB5757").withAlphaComponent(CGFloat(0.15))
     }
     
     enum Url {
@@ -49,5 +57,19 @@ enum Constants {
         static let stackViewSpacingHor: CGFloat = 30
     }
     
-   
+    enum Constraints {
+        static let offset16: CGFloat = 16
+        static let inset16: CGFloat = -16
+    }
+    
+    enum ImageSystemName {
+        static let arrowForward = "chevron.forward"
+        static let arrowback = "chevron.backward"
+        static let arrowDown = "chevron.down.square.fill"
+        static let arrowUp = "chevron.up.square.fill"
+        static let conviniens = "face.smiling"
+        static let include = "checkmark.square"
+        static let notInclude = "multiply.square"
+    }
+    
 }

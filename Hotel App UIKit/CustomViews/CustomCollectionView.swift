@@ -27,10 +27,9 @@ extension UICollectionView {
         let collectionView = DynamicHeightCollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(ImageViewCell.self, forCellWithReuseIdentifier: ImageViewCell.identifier)
         collectionView.showsHorizontalScrollIndicator = false
-        
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.widthAnchor.constraint(equalToConstant: 360).isActive = true
         collectionView.heightAnchor.constraint(equalToConstant: 257).isActive = true
+            
         return collectionView
     }
 }

@@ -38,7 +38,7 @@ extension UILabel {
     class func labelHead(title: String?) -> UILabel {
         let label =  UILabel()
         label.textAlignment = .left
-        label.font = UIFont.systemFont(ofSize: 22)
+        label.font = UIFont.systemFont(ofSize: 22, weight: .medium)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = .zero
         if let title = title {
@@ -58,6 +58,17 @@ extension UILabel {
         }
         return label
     }
+    
+    class func labelError() -> UILabel {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Loading error, serverce problem"
+        label.numberOfLines = 0
+        label.textColor = .black
+        label.isHidden = true
+        return label
+    }
+    
 
 }
 
