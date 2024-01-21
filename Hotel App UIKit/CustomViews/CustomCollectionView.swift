@@ -2,10 +2,11 @@
 //  CustomCollectionView.swift
 //  Hotel App UIKit
 //
-//  Created by Анастасия on 29.12.2023.
+//  Created by Анастасия on 29.12.2023
 //
 
 import UIKit
+
 
 extension UICollectionView {
     static func customCollectionView<T: UICollectionViewCell>(cellClass: T.Type, reuseIdentifier: String) -> UICollectionView {
